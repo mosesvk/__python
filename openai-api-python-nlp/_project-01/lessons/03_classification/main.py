@@ -1,4 +1,3 @@
-
 from dotenv import load_dotenv
 from anthropic import Anthropic
 import json
@@ -6,22 +5,35 @@ import json
 load_dotenv()
 client = Anthropic()
 
-def classify(system_prompt, user_content, temperature=0):
+def classify(system_prompt, user_content, temperature=0.1):
     response = client.messages.create(
         model="claude-haiku-4-5-20251001",
-        max_tokens=256,
+        max_tokens=512,
         temperature=temperature,
         system=system_prompt,
         messages=[
             {"role": "user", "content": user_content}
         ]
     )
-    return response.content[0].text
+    raw = response.content[0].text
+    # Debug: see exactly what Claude returns before parsing
+    print(f"  [raw response]: {raw[:100]}")
+    return raw
 
-# --- Classifier 1: Sentiment (from the course) ---
+def safe_parse(result):
+    # Strip markdown code fences if Claude wraps JSON in ```json ... ```
+    cleaned = result.strip()
+    if cleaned.startswith("```"):
+        cleaned = cleaned.split("```")[1]
+        if cleaned.startswith("json"):
+            cleaned = cleaned[4:]
+    return json.loads(cleaned.strip())
+
+# --- Classifier 1: Sentiment ---
 print("=== Sentiment Classifier ===")
 system = """Classify the sentiment of each statement as positive, negative, or neutral.
-Respond only in JSON format like: {"results": [{"text": "...", "sentiment": "..."}]}"""
+Respond only in JSON format like: {"results": [{"text": "...", "sentiment": "..."}]}
+Do not include any explanation or markdown, only the JSON object."""
 
 statements = [
     "I love how quickly the invoices are processed!",
@@ -31,7 +43,7 @@ statements = [
 
 user_content = "Classify these:\n" + "\n".join(f"{i+1}. {s}" for i, s in enumerate(statements))
 result = classify(system, user_content)
-parsed = json.loads(result)
+parsed = safe_parse(result)
 for item in parsed["results"]:
     print(f"  {item['sentiment'].upper()}: {item['text']}")
 
@@ -39,7 +51,8 @@ for item in parsed["results"]:
 print("\n=== GL Account Classifier ===")
 system = """You are an accounting expert. Classify each transaction into a GL account category.
 Choose from: [Revenue, COGS, Payroll, Rent, Utilities, Travel, Software, Office Supplies, Other]
-Respond only in JSON: {"results": [{"transaction": "...", "category": "..."}]}"""
+Respond only in JSON: {"results": [{"transaction": "...", "category": "..."}]}
+Do not include any explanation or markdown, only the JSON object."""
 
 transactions = [
     "Monthly Adobe Acrobat subscription $54.99",
@@ -50,14 +63,15 @@ transactions = [
 
 user_content = "\n".join(f"{i+1}. {t}" for i, t in enumerate(transactions))
 result = classify(system, user_content)
-parsed = json.loads(result)
+parsed = safe_parse(result)
 for item in parsed["results"]:
     print(f"  {item['category']:15} → {item['transaction']}")
 
 # --- Classifier 3: Invoice Priority ---
 print("\n=== Invoice Priority Classifier ===")
 system = """Classify each invoice description as High, Medium, or Low priority based on urgency.
-Respond only in JSON: {"results": [{"invoice": "...", "priority": "..."}]}"""
+Respond only in JSON: {"results": [{"invoice": "...", "priority": "..."}]}
+Do not include any explanation or markdown, only the JSON object."""
 
 invoices = [
     "Vendor overdue notice - 90 days past due, $45,000",
@@ -67,6 +81,6 @@ invoices = [
 
 user_content = "\n".join(f"{i+1}. {inv}" for i, inv in enumerate(invoices))
 result = classify(system, user_content)
-parsed = json.loads(result)
+parsed = safe_parse(result)
 for item in parsed["results"]:
     print(f"  {item['priority']:8} → {item['invoice']}")
