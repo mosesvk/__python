@@ -4,96 +4,83 @@ from anthropic import Anthropic
 load_dotenv()
 client = Anthropic()
 
-def generate(system_prompt, user_content, temperature=0.75, max_tokens=400):
+def insert_text(prefix, suffix, context="", temperature=0.7, max_tokens=400):
+    """Fill in the middle between a prefix and suffix."""
+    system = """You are a professional business writer for an accounting firm.
+You will be given a PREFIX (beginning of a document) and a SUFFIX (ending of a document).
+Your job is to write ONLY the middle section that connects them naturally.
+Do not repeat the prefix or suffix. Just write the middle content."""
+
+    user_content = f"""PREFIX:
+{prefix}
+
+SUFFIX:
+{suffix}
+{f'CONTEXT: {context}' if context else ''}
+
+Write the middle section that connects the prefix to the suffix:"""
+
     response = client.messages.create(
         model="claude-haiku-4-5-20251001",
         max_tokens=max_tokens,
         temperature=temperature,
-        system=system_prompt,
-        messages=[
-            {"role": "user", "content": user_content}
-        ]
+        system=system,
+        messages=[{"role": "user", "content": user_content}]
     )
     return response.content[0].text
 
-# ============================================================
-# PART 1: GENERATION
-# ============================================================
+# -------------------------------------------------------
+# Example 1: From the course — fill in steps
+# -------------------------------------------------------
+print("=== Fill In: Weight Loss Steps ===")
+prefix = "How to lose weight:\n1. Do not skip breakfast."
+suffix = "12. Plan your meals."
 
-# --- Generation 1: Brainstorming (from the course) ---
-print("=== Brainstorm: AI + Accounting Ideas ===")
-result = generate(
-    system_prompt="You are a creative technology consultant for accounting firms.",
-    user_content="Brainstorm 3 practical ways AI could save time at a top 25 accounting firm. Be specific and concise.",
-    temperature=0.75
-)
-print(result)
+middle = insert_text(prefix, suffix, temperature=0.7)
+print(prefix)
+print(middle)
+print(suffix)
 
-# --- Generation 2: Draft a client email ---
-print("\n=== Generate: Client Email Draft ===")
-result = generate(
-    system_prompt="You are a professional CPA at a top accounting firm. Write concise, professional emails.",
-    user_content="""Draft a short email to a client letting them know:
-- Their Q1 tax return is ready for review
-- We need their signature by April 25th
-- They can schedule a 15-min call to review
-Client name: Robert Chen""",
-    temperature=0.5
-)
-print(result)
+# -------------------------------------------------------
+# Example 2: Accounting firm engagement letter
+# -------------------------------------------------------
+print("\n=== Fill In: Engagement Letter ===")
+prefix = """Dear Mr. Thompson,
 
-# --- Generation 3: Generate Python code ---
-print("\n=== Generate: Python Code ===")
-result = generate(
-    system_prompt="You are a Python expert. Write clean, commented code.",
-    user_content="Write a Python function that takes a list of invoice amounts and returns the total, average, and count.",
-    temperature=0.2
-)
-print(result)
+We are pleased to confirm our engagement with Thompson Manufacturing, Inc. for the 
+fiscal year ending December 31, 2026. This letter outlines the terms of our engagement."""
 
-# ============================================================
-# PART 2: TRANSFORMATION
-# ============================================================
+suffix = """We appreciate the opportunity to serve you and look forward to a productive 
+engagement. Please sign and return a copy of this letter to confirm your acceptance.
 
-# --- Transformation 1: Summarize ---
-print("\n=== Transform: Summarize ===")
-long_text = """
-The audit committee met on March 15th to review Q4 financials. Revenue was up 12% 
-year over year, driven primarily by new client acquisitions in the healthcare sector. 
-Operating expenses increased by 8% due to expanded headcount and office lease renewals 
-in three locations. EBITDA margin improved slightly to 23.4% from 22.1% the prior year. 
-The committee flagged three open items: reconciliation of intercompany transactions, 
-pending resolution of a vendor dispute totaling $340,000, and completion of the fixed 
-asset depreciation schedule. Next meeting is scheduled for April 20th.
-"""
-result = generate(
-    system_prompt="You are an executive assistant. Summarize meeting notes into bullet points.",
-    user_content=f"Summarize this into 3 bullet points:\n{long_text}",
-    temperature=0.3
-)
-print(result)
+Sincerely,
+[Partner Name]
+[Firm Name]"""
 
-# --- Transformation 2: Reformat data ---
-print("\n=== Transform: Reformat to CSV ===")
-messy_data = """
-John Smith owes $4,500 due March 1st
-ABC Corp invoice $12,000 due February 15th  
-Sarah Johnson balance $890 due March 30th
-XYZ LLC outstanding $67,400 due January 31st
-"""
-result = generate(
-    system_prompt="You are a data formatter. Convert input into clean CSV format only. No explanation.",
-    user_content=f"Convert to CSV with columns: name, amount, due_date:\n{messy_data}",
-    temperature=0.1
-)
-print(result)
+context = "Audit engagement, $2.4M revenue client, publicly traded, first-year client"
 
-# --- Transformation 3: Translate tone ---
-print("\n=== Transform: Formal → Simple ===")
-formal_text = "Pursuant to our engagement letter dated January 1st, we hereby notify you that the aforementioned reconciliation discrepancies remain unresolved and require your immediate attention."
-result = generate(
-    system_prompt="Rewrite accounting/legal text in plain, simple English that anyone can understand.",
-    user_content=f"Simplify this: {formal_text}",
-    temperature=0.3
-)
-print(result)
+middle = insert_text(prefix, suffix, context=context, temperature=0.5)
+print(prefix)
+print("\n" + middle + "\n")
+print(suffix)
+
+# -------------------------------------------------------
+# Example 3: Audit finding report
+# -------------------------------------------------------
+print("\n=== Fill In: Audit Finding ===")
+prefix = """AUDIT FINDING #3 — Accounts Receivable Reconciliation
+Severity: Medium
+Date Identified: April 13, 2026
+
+OBSERVATION:"""
+
+suffix = """RECOMMENDATION:
+Management should implement a monthly reconciliation procedure with dual review
+by the Controller and CFO prior to period close."""
+
+context = "AR balance of $890,000 with $45,000 in unreconciled items over 90 days"
+
+middle = insert_text(prefix, suffix, context=context, temperature=0.3)
+print(prefix)
+print(middle)
+print(suffix)
