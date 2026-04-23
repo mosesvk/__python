@@ -1,0 +1,8 @@
+id,date,vendor,amount,category
+1,2024-01-15,Starbucks,12.50,meals
+2,01/16/2024,Delta Airlines,350.00,travel
+3,2024-01-15,Starbucks,12.50,meals
+4,2024-01-20,,45.00,office
+5,2024-01-22,Uber,25.75,TRAVEL
+6,,Amazon,89.99,office
+7,2024-01-25,Uber,25.75,travel
