@@ -1,0 +1,30 @@
+[2026-04-25T05:29:57.487+0000] {local_task_job_runner.py:120} INFO - ::group::Pre task execution logs
+[2026-04-25T05:29:57.494+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: accounts_payable_pipeline.transform scheduled__2026-04-24T00:00:00+00:00 [queued]>
+[2026-04-25T05:29:57.497+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: accounts_payable_pipeline.transform scheduled__2026-04-24T00:00:00+00:00 [queued]>
+[2026-04-25T05:29:57.497+0000] {taskinstance.py:2306} INFO - Starting attempt 1 of 1
+[2026-04-25T05:29:57.502+0000] {taskinstance.py:2330} INFO - Executing <Task(PythonOperator): transform> on 2026-04-24 00:00:00+00:00
+[2026-04-25T05:29:57.506+0000] {warnings.py:112} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:62: DeprecationWarning: This process (pid=696) is multi-threaded, use of fork() may lead to deadlocks in the child.
+  pid = os.fork()
+
+[2026-04-25T05:29:57.507+0000] {standard_task_runner.py:64} INFO - Started process 698 to run task
+[2026-04-25T05:29:57.507+0000] {standard_task_runner.py:90} INFO - Running: ['***', 'tasks', 'run', 'accounts_payable_pipeline', 'transform', 'scheduled__2026-04-24T00:00:00+00:00', '--job-id', '4', '--raw', '--subdir', 'DAGS_FOLDER/ap_pipeline.py', '--cfg-path', '/tmp/tmp4pfefbas']
+[2026-04-25T05:29:57.509+0000] {standard_task_runner.py:91} INFO - Job 4: Subtask transform
+[2026-04-25T05:29:57.530+0000] {task_command.py:426} INFO - Running <TaskInstance: accounts_payable_pipeline.transform scheduled__2026-04-24T00:00:00+00:00 [running]> on host da99a333c712
+[2026-04-25T05:29:57.562+0000] {taskinstance.py:2648} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='accounts_payable_pipeline' AIRFLOW_CTX_TASK_ID='transform' AIRFLOW_CTX_EXECUTION_DATE='2026-04-24T00:00:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2026-04-24T00:00:00+00:00'
+[2026-04-25T05:29:57.563+0000] {taskinstance.py:430} INFO - ::endgroup::
+[2026-04-25T05:29:57.568+0000] {warnings.py:112} WARNING - /opt/***/dags/ap_pipeline.py:22: FutureWarning: Passing literal json to 'read_json' is deprecated and will be removed in a future version. To read from a literal string, wrap it in a 'StringIO' object.
+  df = pd.read_json(raw)
+
+[2026-04-25T05:29:57.588+0000] {logging_mixin.py:188} INFO - ✅ Transformed — 3 rows
+[2026-04-25T05:29:57.595+0000] {logging_mixin.py:188} INFO -    invoice_id     vendor   amount  ... currency   late vendor_masked
+0           1  Acme Corp  1500.00  ...      USD   True         Ac***
+1           2       Dell   899.99  ...      EUR  False         De***
+3           4    Staples    45.00  ...      USD  False         St***
+
+[3 rows x 8 columns]
+[2026-04-25T05:29:57.595+0000] {python.py:237} INFO - Done. Returned value was: None
+[2026-04-25T05:29:57.595+0000] {taskinstance.py:441} INFO - ::group::Post task execution logs
+[2026-04-25T05:29:57.598+0000] {taskinstance.py:1206} INFO - Marking task as SUCCESS. dag_id=accounts_payable_pipeline, task_id=transform, run_id=scheduled__2026-04-24T00:00:00+00:00, execution_date=20260424T000000, start_date=20260425T052957, end_date=20260425T052957
+[2026-04-25T05:29:57.607+0000] {local_task_job_runner.py:243} INFO - Task exited with return code 0
+[2026-04-25T05:29:57.615+0000] {taskinstance.py:3503} INFO - 0 downstream tasks scheduled from follow-on schedule check
+[2026-04-25T05:29:57.616+0000] {local_task_job_runner.py:222} INFO - ::endgroup::
