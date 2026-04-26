@@ -8,7 +8,6 @@ class Client(object):
         if ssl_verify is False:
             urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-
     def get(self) -> list:
         response = requests.get(self.url, verify=self.ssl_verify)
         return response.json()

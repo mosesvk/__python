@@ -51,6 +51,16 @@ You should see output for two request modes:
 
 Each mode attempts to fetch stations and prints the station count plus a sample station name and city.
 
+## Why SSL Is Important
+
+Use SSL verification (`verify=True`, the default) for normal development and production use.
+
+- It encrypts traffic between your client and the API.
+- It verifies that your client is talking to the real server.
+- It helps prevent man-in-the-middle attacks and response tampering.
+
+The `SSL OFF (verify=False)` mode in this project is included only as a lesson/demo scenario. Keep SSL on unless you are troubleshooting in a controlled environment.
+
 ## Quick Start Checklist
 
 1. Open terminal in `01_weather-client`.
