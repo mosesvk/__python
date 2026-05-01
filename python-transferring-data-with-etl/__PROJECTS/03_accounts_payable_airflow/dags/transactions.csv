@@ -1,0 +1,11 @@
+SaleID,Product,Category,Price,Quantity,Discount,SaleDate,CustomerName,Age,Gender,City
+1074,Watch,D,300.0,3,0.0,2023-10-01,Emily Moore,33,Female,Boston
+1075,Phone,A,200.0,5,0.0,2023-10-02,John Wilson,29,Male,Chicago
+1076,Tablet,B,500.0,7,0.05,2023-10-03,Patricia Davis,37,Female,New York
+1077,E-Book,C,100.0,2,0.0,2023-10-04,Robert Hernandez,42,Male,Los Angeles
+1078,Watch,D,300.0,4,0.0,2023-10-05,Linda Smith,31,Female,Houston
+1079,Phone,A,200.0,8,0.0,2023-10-06,William Johnson,36,Male,San Francisco
+1080,Tablet,B,500.0,5,0.05,2023-10-07,Susan Davis,28,Female,Miami
+1081,E-Book,C,100.0,3,0.0,2023-10-07,David Wilson,30,Male,Seattle
+1082,Tablet,B,500.0,9,0.05,2023-10-08,Michelle Anderson,39,Female,Los Angeles
+1083,Tablet,B,500.0,9,0.05,2023-10-08,Michelle Anderson,39,Female,Los Angeles
