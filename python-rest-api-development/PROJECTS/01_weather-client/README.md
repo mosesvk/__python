@@ -5,6 +5,7 @@
 This project is a small Python client that fetches air-quality station data from the MET Norway API and maps each station into a typed Python model.
 
 At a high level, it demonstrates:
+
 - Making HTTP requests with `requests`.
 - Optionally disabling SSL certificate verification for local/testing scenarios.
 - Converting API response dictionaries into structured `dataclass` objects.
@@ -46,6 +47,7 @@ python main.py
 ```
 
 You should see output for two request modes:
+
 - `SSL ON (default)`
 - `SSL OFF (verify=False)`
 
@@ -72,3 +74,4 @@ The `SSL OFF (verify=False)` mode in this project is included only as a lesson/d
 
 - This project is intended as a learning/example client for consuming a REST API.
 - SSL verification should normally remain enabled in production use.
+
